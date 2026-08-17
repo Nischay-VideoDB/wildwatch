@@ -30,5 +30,6 @@ def test_showcase_has_small_viewport_and_favicon_guards() -> None:
     assert "@media (max-width: 390px)" in source
     assert ".journey { grid-template-columns: 1fr; }" in source
     assert "WildWatch" in favicon.read_text()
+    assert config["framework"] is None
     assert config["outputDirectory"] == "showcase"
     assert config["rewrites"] == [{"source": "/favicon.ico", "destination": "/favicon.svg"}]

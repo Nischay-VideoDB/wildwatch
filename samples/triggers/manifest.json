@@ -85,7 +85,7 @@
       "source": "synthesized",
       "source_url": null,
       "fallback_url": null,
-      "source_search_query": "Pexels CC0 lioness/savanna + Freesound CC0 gunshot",
+      "source_search_query": "Pexels-licensed lioness/savanna + Freesound CC0 gunshot",
       "section": null,
       "duration_s": 10,
       "events_expected": [
@@ -103,15 +103,15 @@
         "overlay_volume": 0.9,
         "mix_filter": "ffmpeg -i base.mp4 -i overlay.mp3 -filter_complex \"[1:a]adelay=4000|4000,volume=0.9[over];[0:a]volume=0.2[base];[base][over]amix=inputs=2:duration=first[mixed]\" -map 0:v -map \"[mixed]\" -t 10 -c:v libx264 -pix_fmt yuv420p -c:a aac out.mp4"
       },
-      "license": "CC0 (Pexels base + Freesound overlay)",
-      "notes": "Static lioness shot (Pexels CC0) + Freesound CC0 rifle gunshot at 4s. STATIC by construction (single locked-off Pexels source). NB: gunshot event validates only on live RTSP rtstream.index_audio path; corpus presence is documentation, not test surface."
+      "license": "Pexels License (base footage) + CC0 (Freesound overlay)",
+      "notes": "Static lioness shot (Pexels License) + Freesound CC0 rifle gunshot at 4s. STATIC by construction (single locked-off Pexels source). NB: gunshot event validates only on live RTSP rtstream.index_audio path; corpus presence is documentation, not test surface."
     },
     {
       "slug": "logging_synth",
       "source": "synthesized",
       "source_url": null,
       "fallback_url": null,
-      "source_search_query": "Pexels CC0 forest aerial + Freesound CC0 chainsaw",
+      "source_search_query": "Pexels-licensed forest aerial + Freesound CC0 chainsaw",
       "section": null,
       "duration_s": 10,
       "events_expected": [
@@ -129,7 +129,7 @@
         "overlay_volume": 0.8,
         "mix_filter": "ffmpeg -i base.mp4 -i overlay.mp3 -filter_complex \"[1:a]atrim=10:17,asetpts=PTS-STARTPTS,adelay=2000|2000,volume=0.8[over];[0:a]volume=0.3[base];[base][over]amix=inputs=2:duration=first[mixed]\" -map 0:v -map \"[mixed]\" -t 10 -c:v libx264 -pix_fmt yuv420p -c:a aac out.mp4"
       },
-      "license": "CC0 (Pexels base + Freesound overlay)",
+      "license": "Pexels License (base footage) + CC0 (Freesound overlay)",
       "notes": "Drone-canopy base is technically aerial-moving but single continuous shot, slow camera motion roughly equivalent to wind-swayed forest cam. Real Husqvarna chainsaw audio from Freesound. NB: chainsaw event validates on live RTSP path only."
     },
     {

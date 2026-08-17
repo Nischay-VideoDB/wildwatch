@@ -3,97 +3,220 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="WildWatch prepared-data showcase" />
-    <title>WildWatch - prepared-data showcase</title>
+    <meta name="description" content="WildWatch prepared wildlife-monitoring examples" />
+    <title>WildWatch - prepared examples</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <style>
       :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #07120e; color: #e8f5ea; }
-      html, body { max-width: 100%; overflow-x: clip; } body { margin: 0; } main { max-width: 1120px; margin: 0 auto; padding: 56px 24px 80px; }
+      * { box-sizing: border-box; } html, body { max-width: 100%; overflow-x: clip; } body { margin: 0; }
+      main { max-width: 1180px; margin: 0 auto; padding: 56px 24px 80px; }
       .eyebrow, .kicker { color: #9fdfb0; font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
       h1 { font-size: clamp(2.3rem, 6vw, 4.8rem); line-height: 1; margin: 16px 0; max-width: 850px; }
-      p { color: #b6c9bb; max-width: 760px; line-height: 1.6; } .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 24px; }
-      article, .panel, .notice { border: 1px solid #244536; border-radius: 16px; background: #0b1b13; overflow: hidden; } article div, .panel { padding: 20px; } iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
-      h2 { font-size: 1.1rem; margin: 0 0 8px; } .tag { display: inline-block; color: #9fdfb0; font-size: .75rem; font-weight: 600; border: 1px solid #386449; border-radius: 999px; padding: 4px 8px; margin-bottom: 12px; }
-      .journey { display: grid; gap: 16px; grid-template-columns: minmax(220px, .8fr) minmax(280px, 1.2fr); margin-top: 36px; } .alert-list { display: grid; gap: 10px; }
-      .alert { width: 100%; text-align: left; color: inherit; cursor: pointer; border: 1px solid #244536; border-radius: 12px; padding: 14px; background: #0b1b13; } .alert:hover, .alert[aria-pressed="true"] { border-color: #75c98a; background: #102719; }
-      .alert small, .muted { color: #8fa995; display: block; margin-top: 5px; } .evidence { display: grid; gap: 10px; margin: 16px 0; } .evidence div { padding: 12px; background: #102719; border-radius: 8px; } .evidence span { display: block; color: #9fdfb0; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-      .unavailable { border: 1px solid #76551d; border-radius: 10px; background: #201a0d; color: #f3dcaa; padding: 14px; } .unavailable p { color: #e9d3a5; margin: 6px 0 0; } .source { margin-top: 16px; }
-      .notice { margin-top: 32px; padding: 20px; border-color: #76551d; background: #201a0d; color: #f3dcaa; } .notice p { color: #e9d3a5; margin-bottom: 0; }
-      code { background: #142b1d; border-radius: 4px; padding: 2px 5px; } .journey > * { min-width: 0; } @media (max-width: 720px) { .journey { grid-template-columns: 1fr; } }
-      @media (max-width: 390px) { main { padding: 36px 16px 56px; } .grid { grid-template-columns: minmax(0, 1fr); } .journey { gap: 12px; margin-top: 24px; } .alert { padding: 12px; } }
+      h2 { font-size: clamp(1.35rem, 3vw, 2rem); margin: 8px 0; } h3 { font-size: .9rem; margin: 0; }
+      p { color: #b6c9bb; max-width: 780px; line-height: 1.6; } a { color: #b9edc3; }
+      .hero-note, .notice { border: 1px solid #76551d; border-radius: 14px; background: #201a0d; color: #f3dcaa; padding: 16px 18px; }
+      .hero-note p, .notice p { color: #e9d3a5; margin: 5px 0 0; }
+      .journey { display: grid; gap: 18px; grid-template-columns: minmax(250px, .82fr) minmax(0, 1.45fr); margin-top: 34px; }
+      .panel { border: 1px solid #244536; border-radius: 18px; background: #0b1b13; min-width: 0; }
+      .list { display: grid; gap: 10px; padding: 14px; }
+      .journey-button { width: 100%; text-align: left; color: inherit; cursor: pointer; border: 1px solid #244536; border-radius: 12px; padding: 14px; background: #0b1b13; transition: border-color .15s ease, background .15s ease; }
+      .journey-button:hover, .journey-button:focus-visible, .journey-button[aria-pressed="true"] { border-color: #75c98a; background: #102719; outline: none; }
+      .journey-button small, .muted { color: #8fa995; display: block; margin-top: 5px; line-height: 1.45; }
+      .detail { padding: 22px; } .tag { display: inline-block; color: #9fdfb0; font-size: .75rem; font-weight: 600; border: 1px solid #386449; border-radius: 999px; padding: 4px 8px; }
+      .facts { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 18px 0; }
+      .fact { padding: 13px; background: #102719; border-radius: 10px; min-width: 0; } .fact span { display: block; color: #9fdfb0; font-size: .69rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
+      .steps { list-style: none; padding: 0; margin: 18px 0; display: grid; gap: 9px; } .steps li { border-left: 2px solid #386449; padding: 3px 0 3px 12px; color: #d1dfd3; }
+      .steps strong { color: #9fdfb0; font-size: .78rem; letter-spacing: .07em; text-transform: uppercase; display: block; }
+      .media { margin-top: 22px; border-top: 1px solid #244536; padding-top: 18px; } iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 12px; background: #07120e; }
+      .media-fallback { border: 1px dashed #6f8c75; border-radius: 12px; padding: 18px; background: #102719; color: #d1dfd3; }
+      .notice { margin-top: 28px; } code { background: #142b1d; border-radius: 4px; padding: 2px 5px; }
+      @media (max-width: 760px) { main { padding: 36px 16px 56px; } .journey { grid-template-columns: minmax(0, 1fr); margin-top: 24px; } .facts { grid-template-columns: minmax(0, 1fr); } .detail { padding: 18px; } }
+      @media (max-width: 390px) { main { padding-inline: 14px; } .journey-button { padding: 12px; } }
     </style>
   </head>
   <body>
     <main>
       <div class="eyebrow">WildWatch / VideoDB</div>
-      <h1>Prepared wildlife result journey</h1>
+      <h1>Prepared examples for a wildlife-monitoring handoff.</h1>
       <p>
-        Select a prepared alert card to review its structured evidence and source. This Vercel-hosted
-        view is intentionally read-only and does not claim that these sample cards are live VideoDB output.
+        Explore five finished review paths from the WildWatch workflow: species, behavior, environmental change,
+        a clearly labeled synthetic threat trigger, and a daily digest handoff. Switching examples is immediate and
+        does not start a stream, contact a provider, or use an operator credential.
       </p>
-      <section class="journey" aria-label="Prepared VideoDB result journey">
-        <div>
-          <p class="kicker">1. Select a prepared alert</p>
-          <div id="alert-list" class="alert-list"></div>
-        </div>
-        <div class="panel">
-          <p class="kicker">2. Review structured evidence</p>
-          <h2 id="alert-title">Choose an alert</h2>
-          <div id="evidence" class="evidence"></div>
-          <div id="availability"></div>
-          <div class="source">
-            <p class="kicker">3. Prepared source playback</p>
-            <iframe id="source-player" title="Prepared WildWatch source" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-            <p class="muted">This is the curated source feed - not a generated evidence clip or daily reel.</p>
-          </div>
-        </div>
+      <section class="hero-note" aria-label="Prepared-example provenance">
+        <strong>Prepared examples, not live alerts.</strong>
+        <p>Each record is a versioned, client-side fixture based on this repository's source registry and trigger manifest. Source playback is labeled whenever it is a public source feed rather than a generated VideoDB evidence clip.</p>
       </section>
+
+      <section class="journey" aria-label="Prepared wildlife examples">
+        <nav class="panel" aria-label="Select a prepared example">
+          <div class="list" id="journey-list"></div>
+        </nav>
+        <article class="panel detail" aria-live="polite">
+          <span class="tag" id="journey-category"></span>
+          <h2 id="journey-title"></h2>
+          <p id="journey-summary"></p>
+          <div class="facts" id="journey-facts"></div>
+          <div>
+            <p class="kicker">Prepared review path</p>
+            <ol class="steps" id="journey-steps"></ol>
+          </div>
+          <div class="media">
+            <p class="kicker" id="playback-heading"></p>
+            <iframe id="source-player" title="Prepared WildWatch source playback" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            <div id="playback-fallback" class="media-fallback" hidden></div>
+            <p class="muted" id="playback-note"></p>
+            <p class="muted"><a id="source-link" target="_blank" rel="noreferrer">Open the labeled source reference</a></p>
+          </div>
+        </article>
+      </section>
+
       <section class="notice">
-        <strong>Live controls are disabled on Vercel.</strong>
-        <p>No RTSP bridge, background worker, Telegram action, or live-alert claim is exposed in this deployment. The repository does not retain a VideoDB result clip or reel URL for these source feeds, so the output state remains honestly unavailable.</p>
+        <strong>Continue in the live workflow when an operator is ready.</strong>
+        <p>The local WildWatch runtime retains RTSP bridging, the four prompt pipelines, cross-modal correlation, Telegram delivery, and daily-reel generation. Those actions are intentionally not available in this public prepared mode. <a href="https://github.com/Nischay-VideoDB/wildwatch#readme">Open the local workflow guide</a>.</p>
       </section>
     </main>
     <script>
-      const preparedAlerts = [
-        {
-          id: "namibia-observation",
-          title: "Namibia waterhole observation",
-          tier: "Tier: sample review",
-          source: "Namibia Waterhole - curated source in config.py / trigger manifest",
-          evidence: "Structured sample: source context, observation category, and review status.",
-          playback: "https://www.youtube-nocookie.com/embed/AeMUdOPFcXI",
-        },
-        {
-          id: "hwange-observation",
-          title: "Hwange waterhole observation",
-          tier: "Tier: sample review",
-          source: "Hwange Waterhole - curated source in config.py / trigger manifest",
-          evidence: "Structured sample: source context, observation category, and review status.",
-          playback: "https://www.youtube-nocookie.com/embed/-rXriX4SiQk",
-        },
-      ];
-      const list = document.getElementById("alert-list");
-      const title = document.getElementById("alert-title");
-      const evidence = document.getElementById("evidence");
-      const availability = document.getElementById("availability");
+      const preparedJourneyManifest = {
+        version: "2026-08-18",
+        entries: [
+          {
+            id: "species-waterhole",
+            category: "Species sighting",
+            title: "Namibia waterhole species review",
+            short: "A fixed-camera species-observation handoff.",
+            summary: "A prepared observer review for the Namibia waterhole source. It demonstrates how the species prompt separates presence, count, and location context before an operator decides whether to flag the scene.",
+            facts: [["Source", "Namibia waterhole"], ["Evidence state", "Prepared observer review"], ["Prompt lens", "Species, count, position"], ["Notification", "Operator confirmation required"]],
+            steps: [["See", "Open the curated fixed-camera source."], ["Understand", "Review the prepared species fields instead of treating the source as a live detection."], ["Act", "Confirm or dismiss the observation in the operator workflow."]],
+            embed: "https://www.youtube-nocookie.com/embed/AeMUdOPFcXI",
+            sourceUrl: "https://www.youtube.com/watch?v=AeMUdOPFcXI",
+            playbackHeading: "Public source playback",
+            playbackNote: "This is the Namibia waterhole source feed - not a generated evidence clip or a live WildWatch alert.",
+          },
+          {
+            id: "behavior-waterhole",
+            category: "Behavior review",
+            title: "Hwange waterhole behavior review",
+            short: "A behavior-first observation path.",
+            summary: "A prepared path for observing behavior and interaction separately from species identification. The client view makes the distinction clear before a behavior pattern is escalated.",
+            facts: [["Source", "Hwange waterhole"], ["Evidence state", "Prepared behavior review"], ["Prompt lens", "Action, interaction, anomaly"], ["Escalation", "Cross-check with another signal"]],
+            steps: [["See", "Inspect the documented Hwange source context."], ["Understand", "Use the prepared behavior fields to frame a focused observer review."], ["Act", "Correlate with environmental or audio evidence before an urgent escalation."]],
+            embed: "https://www.youtube-nocookie.com/embed/-rXriX4SiQk",
+            sourceUrl: "https://www.youtube.com/watch?v=-rXriX4SiQk",
+            playbackHeading: "Public source playback",
+            playbackNote: "This is the Hwange waterhole source feed - not a generated behavior clip or a live alert.",
+          },
+          {
+            id: "environment-drought",
+            category: "Environmental change",
+            title: "Dry-waterhole environmental review",
+            short: "A prepared drought-monitoring scenario.",
+            summary: "This source was curated in the trigger manifest for a water-critical scenario. The prepared record shows the environmental prompt's review path without claiming a fresh model result from this deployment.",
+            facts: [["Source", "Curated drought footage"], ["Expected fixture", "water_critical"], ["Prompt lens", "Water and vegetation state"], ["Provenance", "Trigger manifest: dry_waterhole"]],
+            steps: [["See", "Review the short drought source at its documented window."], ["Understand", "Inspect water-state and environmental-flag fields in the prepared scenario."], ["Act", "Route a confirmed low-water condition to the monitoring team."]],
+            embed: "https://www.youtube-nocookie.com/embed/8oO3QeAZxPc",
+            sourceUrl: "https://www.youtube.com/watch?v=8oO3QeAZxPc",
+            playbackHeading: "Curated source playback",
+            playbackNote: "This is source footage for the prepared drought scenario - not a generated VideoDB evidence clip.",
+          },
+          {
+            id: "threat-synthetic",
+            category: "Threat alert",
+            title: "Synthetic gunshot trigger review",
+            short: "A visibly synthesized threat-test fixture.",
+            summary: "This prepared alert explains the documented synthetic test recipe: Pexels-licensed wildlife footage with a Freesound CC0 gunshot overlay at four seconds. It is useful for reviewing the threat handoff, but it never represents a real poaching event.",
+            facts: [["Evidence state", "Synthetic test fixture"], ["Expected fixture", "gunshot at 00:04"], ["Prompt lens", "Anthropophony threat"], ["Provenance", "Trigger manifest: poaching_synth"]],
+            steps: [["See", "Review the fixture provenance and labeled base-footage reference."], ["Understand", "Treat the gunshot as a test signal, not a field observation."], ["Act", "Verify the alert and escalation path in the local RTStream workflow."]],
+            embed: null,
+            sourceUrl: "https://www.pexels.com/video/a-lioness-standing-in-a-field-11760744/",
+            playbackHeading: "Synthetic-fixture source reference",
+            playbackNote: "No generated clip is committed to this public build. The linked page is the labeled base-footage reference, not evidence playback and not a real threat event.",
+          },
+          {
+            id: "daily-digest",
+            category: "Daily digest",
+            title: "Daily digest handoff",
+            short: "A prepared review of the digest sequence.",
+            summary: "A finished client walkthrough of the daily-digest handoff: select reviewed events, preserve their provenance, and send the chosen set to the local Timeline and delivery workflow. This build does not claim a retained generated reel URL.",
+            facts: [["Inputs", "Reviewed event records"], ["Output state", "Prepared handoff"], ["Composition", "Local Timeline workflow"], ["Delivery", "Operator-controlled"]],
+            steps: [["See", "Choose reviewed examples from the prepared alert list."], ["Understand", "Check provenance and escalation state before selecting the digest set."], ["Act", "Build the daily reel only in the credentialed local workflow."]],
+            embed: "https://www.youtube-nocookie.com/embed/AeMUdOPFcXI",
+            sourceUrl: "https://www.youtube.com/watch?v=AeMUdOPFcXI",
+            playbackHeading: "Selected source playback",
+            playbackNote: "This is a source feed used for review - not a generated daily reel.",
+          },
+        ],
+      };
+
+      const list = document.getElementById("journey-list");
+      const category = document.getElementById("journey-category");
+      const title = document.getElementById("journey-title");
+      const summary = document.getElementById("journey-summary");
+      const facts = document.getElementById("journey-facts");
+      const steps = document.getElementById("journey-steps");
       const player = document.getElementById("source-player");
-      function selectAlert(alert) {
-        title.textContent = alert.title;
-        evidence.replaceChildren();
-        [["Provenance", alert.source], ["Evidence", alert.evidence], ["Tier", alert.tier]].forEach(([label, value]) => {
-          const item = document.createElement("div"); const heading = document.createElement("span");
-          heading.textContent = label; item.append(heading, document.createTextNode(value)); evidence.append(item);
-        });
-        availability.innerHTML = '<div class="unavailable"><strong>Prepared output unavailable</strong><p>No committed VideoDB evidence-clip or reel URL exists for this source. The player below is the source feed only.</p></div>';
-        player.src = alert.playback;
-        list.querySelectorAll("button").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.id === alert.id)));
+      const fallback = document.getElementById("playback-fallback");
+      const playbackHeading = document.getElementById("playback-heading");
+      const playbackNote = document.getElementById("playback-note");
+      const sourceLink = document.getElementById("source-link");
+
+      function addTextElement(parent, tagName, text, className) {
+        const node = document.createElement(tagName);
+        node.textContent = text;
+        if (className) node.className = className;
+        parent.append(node);
+        return node;
       }
-      preparedAlerts.forEach((alert) => {
-        const button = document.createElement("button"); button.className = "alert"; button.dataset.id = alert.id;
-        button.innerHTML = `<strong>${alert.title}</strong><small>${alert.tier} - prepared sample, not a live alert</small>`;
-        button.addEventListener("click", () => selectAlert(alert)); list.append(button);
+
+      function selectJourney(journey) {
+        category.textContent = journey.category;
+        title.textContent = journey.title;
+        summary.textContent = journey.summary;
+        facts.replaceChildren();
+        journey.facts.forEach(([label, value]) => {
+          const fact = document.createElement("div"); fact.className = "fact";
+          addTextElement(fact, "span", label);
+          addTextElement(fact, "div", value);
+          facts.append(fact);
+        });
+        steps.replaceChildren();
+        journey.steps.forEach(([label, value]) => {
+          const step = document.createElement("li");
+          addTextElement(step, "strong", label);
+          step.append(document.createTextNode(value));
+          steps.append(step);
+        });
+        playbackHeading.textContent = journey.playbackHeading;
+        playbackNote.textContent = journey.playbackNote;
+        sourceLink.href = journey.sourceUrl;
+        sourceLink.textContent = "Open the labeled source reference";
+        if (journey.embed) {
+          player.hidden = false;
+          player.src = journey.embed;
+          fallback.hidden = true;
+          fallback.replaceChildren();
+        } else {
+          player.hidden = true;
+          player.removeAttribute("src");
+          fallback.hidden = false;
+          fallback.replaceChildren();
+          addTextElement(fallback, "strong", "Playback is intentionally unavailable in this static fixture.");
+          addTextElement(fallback, "p", "The local workflow can play a generated evidence clip after it processes a real stream. This card only documents a synthetic test trigger and its base-footage reference.");
+        }
+        list.querySelectorAll("button").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.id === journey.id)));
+      }
+
+      preparedJourneyManifest.entries.forEach((journey) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "journey-button";
+        button.dataset.id = journey.id;
+        addTextElement(button, "strong", journey.title);
+        addTextElement(button, "small", `${journey.category} - ${journey.short}`);
+        button.addEventListener("click", () => selectJourney(journey));
+        list.append(button);
       });
-      selectAlert(preparedAlerts[0]);
+      selectJourney(preparedJourneyManifest.entries[0]);
     </script>
   </body>
 </html>

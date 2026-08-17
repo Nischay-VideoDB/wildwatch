@@ -47,6 +47,7 @@ from pydantic import BaseModel, Field, field_validator
 load_dotenv()
 
 from wildwatch import dashboard, event_log, ingest, sources  # noqa: E402
+from wildwatch.runtime_paths import state_file as default_state_file  # noqa: E402
 from wildwatch.telegram import (  # noqa: E402
     configure_coll_getter,
     genai_friendly_explanation,
@@ -1920,11 +1921,9 @@ class DigestRequest(BaseModel):
 @app.post("/api/digest/build")
 async def api_build_digest(req: DigestRequest) -> dict:
     """Manual digest reel build. Returns {player_url, stream_url, summary, ...}."""
-    from pathlib import Path as _PPath
-
     from wildwatch import digest as _digest
 
-    state_file = _PPath(__file__).resolve().parent.parent / ".state.json"
+    state_file = default_state_file()
     state: dict[str, Any] = {}
     if state_file.exists():
         try:

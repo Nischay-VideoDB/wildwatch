@@ -11,10 +11,9 @@ guide's critical rules:
 - ``managed_sandbox`` context manager guarantees ``stop()`` runs even on
   exception, preventing overnight credit burn.
 
-KNOWN GAP: the hackathon-branch SDK's ``Connection.create_sandbox`` does
-NOT accept the ``idle_timeout`` kwarg shown in the sandbox guide. Until
-the SDK catches up, every caller MUST explicitly ``stop_sandbox`` (or use
-``managed_sandbox``). No safety net.
+``Connection.create_sandbox`` does not accept an ``idle_timeout`` argument,
+so every caller must explicitly ``stop_sandbox`` (or use
+``managed_sandbox``).
 """
 
 from __future__ import annotations
@@ -24,14 +23,14 @@ import logging
 from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import Any
 
+from wildwatch.runtime_paths import state_file
 from wildwatch.state_io import atomic_write_json
 
 logger = logging.getLogger(__name__)
 
-STATE_FILE = Path(__file__).resolve().parent.parent / ".state.json"
+STATE_FILE = state_file()
 
 
 def _load_state() -> dict[str, Any]:

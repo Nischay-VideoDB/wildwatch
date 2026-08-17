@@ -18,14 +18,14 @@ import threading
 import time
 import uuid
 from dataclasses import asdict, dataclass, field, fields
-from pathlib import Path
 from typing import Any, Literal, get_args
 
+from wildwatch.runtime_paths import state_file
 from wildwatch.state_io import atomic_write_json
 
 logger = logging.getLogger(__name__)
 
-STATE_FILE = Path(__file__).resolve().parent.parent / ".state.json"
+STATE_FILE = state_file()
 
 # Concurrent ingest tasks (reconnect + progress emit) can interleave a
 # load/update/save sequence on .state.json. Without this lock the second

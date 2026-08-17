@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="WildWatch prepared-data showcase" />
+    <title>WildWatch - prepared-data showcase</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #07120e; color: #e8f5ea; }
+      body { margin: 0; } main { max-width: 1120px; margin: 0 auto; padding: 56px 24px 80px; }
+      .eyebrow { color: #9fdfb0; font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+      h1 { font-size: clamp(2.3rem, 6vw, 4.8rem); line-height: 1; margin: 16px 0; max-width: 850px; }
+      p { color: #b6c9bb; max-width: 760px; line-height: 1.6; } .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 36px; }
+      article, .notice { border: 1px solid #244536; border-radius: 16px; background: #0b1b13; overflow: hidden; } article div { padding: 20px; } iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
+      h2 { font-size: 1.1rem; margin: 0 0 8px; } .tag { display: inline-block; color: #9fdfb0; font-size: .75rem; font-weight: 600; border: 1px solid #386449; border-radius: 999px; padding: 4px 8px; margin-bottom: 12px; }
+      .notice { margin-top: 32px; padding: 20px; border-color: #76551d; background: #201a0d; color: #f3dcaa; } .notice p { color: #e9d3a5; margin-bottom: 0; }
+      code { background: #142b1d; border-radius: 4px; padding: 2px 5px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="eyebrow">WildWatch / VideoDB</div>
+      <h1>Prepared wildlife-source review</h1>
+      <p>
+        This Vercel-hosted showcase preserves the curated camera sources used by WildWatch.
+        It is intentionally read-only: the local runtime owns RTSP bridging, VideoDB workers,
+        live alerts, Telegram delivery, and operator credentials.
+      </p>
+      <section class="grid" aria-label="Prepared source playback">
+        <article>
+          <iframe src="https://www.youtube-nocookie.com/embed/AeMUdOPFcXI" title="Namibia Waterhole source" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+          <div><span class="tag">Prepared source</span><h2>Namibia Waterhole</h2><p>Curated fixed-camera source for species, behaviour, environment, and audio analysis.</p></div>
+        </article>
+        <article>
+          <iframe src="https://www.youtube-nocookie.com/embed/-rXriX4SiQk" title="Hwange Waterhole source" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+          <div><span class="tag">Prepared source</span><h2>Hwange Waterhole</h2><p>Curated fixed-camera source used to review the same four-lens interpretation flow.</p></div>
+        </article>
+      </section>
+      <section class="notice">
+        <strong>Live controls are disabled on Vercel.</strong>
+        <p>No RTSP bridge, background worker, Telegram action, or live-alert claim is exposed in this deployment. A future live Vercel workflow needs durable job and source state in Azure PostgreSQL plus Vercel-supported queue/workflow processing.</p>
+      </section>
+    </main>
+  </body>
+</html>

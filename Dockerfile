@@ -6,12 +6,6 @@ FROM python:3.12-slim AS builder
 
 WORKDIR /build
 
-# System deps for videodb git install + scientific Python wheels
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        git \
-        build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY pyproject.toml ./
 COPY wildwatch/__init__.py ./wildwatch/__init__.py
 

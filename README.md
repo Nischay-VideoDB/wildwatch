@@ -114,6 +114,20 @@ uvicorn wildwatch.webhooks:app --host 127.0.0.1 --port 8000 --reload
 
 Skip the tunnel for the upload-only demo — Path-B sweep fires locally.
 
+## Vercel showcase
+
+Deploy this repository as the `wildwatch` Vercel project. The checked-in
+configuration serves the prepared-source showcase in `showcase/`; it provides
+playback of the curated camera sources without representing RTSP bridging,
+long-running workers, alert callbacks, or Telegram delivery as serverless
+actions.
+
+The current FastAPI app remains the local developer runtime. A live Vercel
+version needs Azure PostgreSQL for sources, indexes, alerts, and digest state,
+with Vercel-supported queue/workflow jobs for ingest, polling, and delivery.
+Do not run its local `.state.json` or event-log workflow on an ephemeral
+function filesystem.
+
 ---
 
 ## Demo flow (no live feed)

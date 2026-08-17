@@ -25,6 +25,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from wildwatch.runtime_paths import state_file as default_state_file
+
 logger = logging.getLogger(__name__)
 
 # Rates (from PARALLEL_STREAM_HANDOVER analysis):
@@ -71,7 +73,7 @@ def _estimate_credit_burn_usd(
     this with its own variants.
     """
     if state_file is None:
-        state_file = Path(__file__).resolve().parent.parent / ".state.json"
+        state_file = default_state_file()
     if not state_file.exists():
         return {
             "total_usd": 0.0,

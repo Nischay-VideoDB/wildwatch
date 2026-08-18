@@ -1,6 +1,6 @@
 import { defineEventHandler, getRouterParam } from "nitro/h3";
 import { z } from "zod";
-import { findJob } from "../../../../../server/db.js";
+import { findJob, updateJob, type WildlifeJob } from "../../../../../server/db.js";
 
 const jobIdSchema = z.string().uuid();
 const mediaPathSchema = z.string().regex(
@@ -38,6 +38,32 @@ function rewritePlaylist(body: string, jobId: string, upstream: URL): string {
   return rewritten;
 }
 
+async function refreshPlayback(job: WildlifeJob): Promise<string> {
+  if (!job.videoId) throw new Error("VideoDB asset is unavailable");
+  const apiKey = process.env.VIDEO_DB_API_KEY || process.env.VIDEODB_API_KEY;
+  if (!apiKey) throw new Error("VideoDB playback is not configured");
+  const { connect } = await import("videodb");
+  const collection = await connect({ apiKey }).getCollection();
+  const video = await collection.getVideo(job.videoId);
+  const timeline = job.observations
+    .map((item) => [Math.max(0, item.start), Math.min(job.durationSeconds || item.end, item.end)] as [number, number])
+    .filter(([start, end]) => end - start >= 0.5)
+    .slice(0, 6);
+  const url = await video.generateStream(timeline.length ? timeline : undefined);
+  await updateJob(job.id, { evidenceUrl: url });
+  return url;
+}
+
+async function fetchPlayback(playbackUrl: string, mediaPath: string): Promise<{ response: Response; upstream: URL }> {
+  const upstream = upstreamFor(playbackUrl, mediaPath);
+  const response = await fetch(upstream, {
+    headers: { "user-agent": "WildWatch/1.0 VideoDB playback relay" },
+    redirect: "error",
+    signal: AbortSignal.timeout(15_000),
+  });
+  return { response, upstream };
+}
+
 export default defineEventHandler(async (event) => {
   const jobId = jobIdSchema.safeParse(getRouterParam(event, "id"));
   const mediaPath = mediaPathSchema.safeParse(getRouterParam(event, "path"));
@@ -46,23 +72,33 @@ export default defineEventHandler(async (event) => {
   }
 
   const job = await findJob(jobId.data);
-  const playbackUrl = job?.evidenceUrl || job?.streamUrl;
+  let playbackUrl = job?.evidenceUrl || job?.streamUrl;
   if (!job || job.status !== "completed" || !playbackUrl) {
     return new Response("Playback is not available", { status: 404 });
   }
 
+  // VideoDB stream manifests are intentionally short-lived. Refresh the
+  // evidence stream before its documented 24-hour lifecycle expires so a
+  // prepared client demo remains playable days after the original run.
+  if (mediaPath.data === "master.m3u8" && Date.now() - Date.parse(job.updatedAt) > 20 * 60 * 60 * 1000) {
+    try { playbackUrl = await refreshPlayback(job); } catch { /* the existing URL may still be valid */ }
+  }
+
+  let response: Response;
   let upstream: URL;
   try {
-    upstream = upstreamFor(playbackUrl, mediaPath.data);
+    ({ response, upstream } = await fetchPlayback(playbackUrl, mediaPath.data));
   } catch {
     return new Response("Playback is not available", { status: 404 });
   }
-
-  const response = await fetch(upstream, {
-    headers: { "user-agent": "WildWatch/1.0 VideoDB playback relay" },
-    redirect: "error",
-    signal: AbortSignal.timeout(15_000),
-  });
+  if (!response.ok) {
+    try {
+      playbackUrl = await refreshPlayback(job);
+      ({ response, upstream } = await fetchPlayback(playbackUrl, mediaPath.data));
+    } catch {
+      return new Response("VideoDB playback unavailable", { status: 502 });
+    }
+  }
   if (!response.ok) return new Response("VideoDB playback unavailable", { status: 502 });
 
   const cacheControl = mediaPath.data.endsWith(".ts")

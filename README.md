@@ -116,17 +116,31 @@ Skip the tunnel for the upload-only demo — Path-B sweep fires locally.
 
 ## Vercel showcase
 
-Deploy this repository as the `wildwatch` Vercel project. The checked-in
-configuration serves the prepared-source showcase in `showcase/`; it provides
-playback of the curated camera sources without representing RTSP bridging,
-long-running workers, alert callbacks, or Telegram delivery as serverless
-actions.
+The public client demo is live at **https://wildwatch-tau.vercel.app**. Its
+**New observation** tab is a real, rate-limited workflow: an HTTPS media URL is
+validated, persisted to Azure PostgreSQL, processed by Vercel Workflow, uploaded
+and indexed in VideoDB, and returned with grounded observations plus a same-origin
+HLS evidence player. The **Prepared examples** tab remains an additive, read-only
+handoff for demos that cannot wait for a new run.
 
-The current FastAPI app remains the local developer runtime. A live Vercel
-version needs Azure PostgreSQL for sources, indexes, alerts, and digest state,
-with Vercel-supported queue/workflow jobs for ingest, polling, and delivery.
-Do not run its local `.state.json` or event-log workflow on an ephemeral
-function filesystem.
+The hosted compatibility API preserves the original dashboard contract where a
+request-scoped deployment can do so honestly:
+
+| Capability | Public Vercel behavior |
+|---|---|
+| Sources, videos, indexes, scenes, stats, usage | Read from durable WildWatch-owned Azure state |
+| HTTPS/YouTube source ingest and reindex | Durable Vercel Workflow + VideoDB |
+| Scene search and clip generation | Live VideoDB calls scoped to persisted WildWatch assets |
+| Digest build | Deduped VideoDB Timeline and grounded generated summary |
+| `/events/stream` | Bounded SSE replay + polling; clients reconnect automatically |
+| RTSP/RTMP, account-wide RTStream/sandbox inventory | Typed `501 OPERATOR_BRIDGE_REQUIRED` boundary |
+| Destructive provider asset/index maintenance | Typed `409` boundary; durable demo evidence is retained |
+| Multipart local-file upload | Typed `501`; use an HTTPS media URL or the local operator runtime |
+| Webhook delivery | Disabled unless an operator configures `WILDWATCH_WEBHOOK_SECRET` |
+
+The FastAPI application remains the full always-on operator runtime for RTSP
+bridging, four concurrent perception lenses, webhook-to-Telegram delivery, and
+local file ingest. Those controls are not simulated by serverless functions.
 
 ---
 
@@ -177,6 +191,11 @@ See [`docs/GENAI_ROADMAP.md`](docs/GENAI_ROADMAP.md). Summary:
 ---
 
 ## Security defences
+
+The public Vercel workflow additionally uses DNS-aware HTTPS-only URL validation,
+per-client and global daily run limits, hashed client identifiers, idempotency
+keys, Azure constraints, scoped asset reads, and provider-error redaction. The
+controls below describe the full local FastAPI operator runtime.
 
 - **CSRF / Origin guard** — `/api/*` mutating requests need `Origin`/`Referer` matching localhost or `WILDWATCH_ALLOWED_ORIGINS`. `/webhook/*` exempt. CLI: `WILDWATCH_ALLOW_NO_ORIGIN=1`.
 - **SSRF guard** — per-kind scheme allowlist + `_host_is_private(host)` blocks loopback/private/link-local in both textual and IPv4-mapped IPv6 form. `file:` / `gopher:` / `javascript:` rejected.

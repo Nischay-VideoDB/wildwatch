@@ -1,10 +1,10 @@
-"""Release contracts for the static, prepared-data Vercel showcase."""
+"""Release contracts for the live workflow and preserved prepared gallery."""
 
 import json
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SHOWCASE = PROJECT_ROOT / "showcase" / "index.html"
+SHOWCASE = PROJECT_ROOT / "index.html"
 
 
 def test_showcase_keeps_the_prepared_example_evidence_and_source_journey() -> None:
@@ -32,7 +32,7 @@ def test_showcase_keeps_the_prepared_example_evidence_and_source_journey() -> No
 
 def test_showcase_has_small_viewport_and_favicon_guards() -> None:
     source = SHOWCASE.read_text()
-    favicon = PROJECT_ROOT / "showcase" / "favicon.svg"
+    favicon = PROJECT_ROOT / "public" / "favicon.svg"
     config = json.loads((PROJECT_ROOT / "vercel.json").read_text())
 
     assert '<link rel="icon" href="/favicon.svg" type="image/svg+xml" />' in source
@@ -44,5 +44,19 @@ def test_showcase_has_small_viewport_and_favicon_guards() -> None:
     assert 'aria-pressed' in source
     assert "WildWatch" in favicon.read_text()
     assert config["framework"] is None
-    assert config["outputDirectory"] == "showcase"
+    assert config["buildCommand"] == "npm run build"
+    assert config["regions"] == ["iad1"]
     assert config["rewrites"] == [{"source": "/favicon.ico", "destination": "/favicon.svg"}]
+
+
+def test_showcase_exposes_live_workflow_without_faking_alert_delivery() -> None:
+    source = SHOWCASE.read_text()
+    script = (PROJECT_ROOT / "live.js").read_text()
+
+    assert 'id="live-form"' in source
+    assert "New observation" in source
+    assert "Prepared examples" in source
+    assert "Telegram delivery remains an optional operator integration" in source
+    assert 'fetch("/api/jobs"' in script
+    assert "localStorage.setItem(storageKey" in script
+    assert "setInterval(() => loadJob" in script

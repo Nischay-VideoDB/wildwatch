@@ -1,10 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "true",
-  "buildCommand": "true",
-  "outputDirectory": "showcase",
-  "cleanUrls": true,
+  "buildCommand": "npm run build",
+  "regions": ["iad1"],
   "rewrites": [
     {
       "source": "/favicon.ico",

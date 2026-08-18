@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="WildWatch prepared wildlife-monitoring examples" />
-    <title>WildWatch - prepared examples</title>
+    <meta name="description" content="WildWatch live VideoDB wildlife review and prepared examples" />
+    <title>WildWatch - live wildlife observer</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <style>
       :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #07120e; color: #e8f5ea; }
@@ -27,26 +27,71 @@
       .fact { padding: 13px; background: #102719; border-radius: 10px; min-width: 0; } .fact span { display: block; color: #9fdfb0; font-size: .69rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
       .steps { list-style: none; padding: 0; margin: 18px 0; display: grid; gap: 9px; } .steps li { border-left: 2px solid #386449; padding: 3px 0 3px 12px; color: #d1dfd3; }
       .steps strong { color: #9fdfb0; font-size: .78rem; letter-spacing: .07em; text-transform: uppercase; display: block; }
-      .media { margin-top: 22px; border-top: 1px solid #244536; padding-top: 18px; } iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 12px; background: #07120e; }
+      .media { margin-top: 22px; border-top: 1px solid #244536; padding-top: 18px; } iframe, video { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 12px; background: #07120e; }
       .media-fallback { border: 1px dashed #6f8c75; border-radius: 12px; padding: 18px; background: #102719; color: #d1dfd3; }
       .notice { margin-top: 28px; } code { background: #142b1d; border-radius: 4px; padding: 2px 5px; }
+      .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0 18px; }
+      .tab, .primary { appearance: none; border: 1px solid #386449; border-radius: 999px; background: #102719; color: #d9f5df; cursor: pointer; font: inherit; font-weight: 700; padding: 10px 16px; }
+      .tab[aria-selected="true"], .primary { border-color: #75c98a; background: #75c98a; color: #07120e; }
+      .primary:disabled { cursor: not-allowed; opacity: .55; }
+      .live-shell { border: 1px solid #386449; border-radius: 18px; background: #0b1b13; padding: 22px; }
+      .live-form { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; margin-top: 18px; }
+      input, select { min-width: 0; border: 1px solid #386449; border-radius: 10px; background: #07120e; color: #e8f5ea; font: inherit; padding: 12px 14px; }
+      .live-meta { color: #8fa995; font-size: .78rem; margin-top: 10px; }
+      .live-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); gap: 16px; margin-top: 18px; }
+      .live-card { border: 1px solid #244536; border-radius: 14px; background: #07120e; padding: 16px; min-width: 0; }
+      .progress { height: 8px; overflow: hidden; border-radius: 999px; background: #193224; margin-top: 12px; } .progress > div { height: 100%; background: #75c98a; transition: width .2s ease; }
+      .observations { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 9px; max-height: 420px; overflow: auto; }
+      .observation { border: 1px solid #244536; border-radius: 10px; padding: 12px; } .observation p { margin: 6px 0 0; font-size: .85rem; }
+      .status-error { color: #ffc7c7; border-color: #744; background: #261111; }
+      [hidden] { display: none !important; }
       @media (max-width: 760px) { main { padding: 36px 16px 56px; } .journey { grid-template-columns: minmax(0, 1fr); margin-top: 24px; } .facts { grid-template-columns: minmax(0, 1fr); } .detail { padding: 18px; } }
+      @media (max-width: 760px) { .live-form, .live-grid { grid-template-columns: minmax(0, 1fr); } }
       @media (max-width: 390px) { main { padding-inline: 14px; } .journey-button { padding: 12px; } }
     </style>
   </head>
   <body>
     <main>
       <div class="eyebrow">WildWatch / VideoDB</div>
-      <h1>Prepared examples for a wildlife-monitoring handoff.</h1>
+      <h1>Run a real wildlife review, or open a prepared handoff.</h1>
       <p>
-        Explore five finished review paths from the WildWatch workflow: species, behavior, environmental change,
-        a clearly labeled synthetic threat trigger, and a daily digest handoff. Switching examples is immediate and
-        does not start a stream, contact a provider, or use an operator credential.
+        Submit public wildlife footage for a durable VideoDB observer pass, or explore five finished review paths.
+        New runs index visible species, behavior, habitat conditions, and clearly evidenced threats without replacing
+        the original RTSP monitoring workflow.
       </p>
       <section class="hero-note" aria-label="Prepared-example provenance">
         <strong>Prepared examples, not live alerts.</strong>
-        <p>Each record is a versioned, client-side fixture based on this repository's source registry and trigger manifest. Source playback is labeled whenever it is a public source feed rather than a generated VideoDB evidence clip.</p>
+        <p>Each record is a versioned, client-side fixture based on this repository's source registry and trigger manifest. Opening a prepared record does not start a stream, contact a provider, or spend an operator credential. Source playback is labeled whenever it is a public source feed rather than a generated VideoDB evidence clip.</p>
       </section>
+
+      <nav class="tabs" aria-label="WildWatch modes">
+        <button class="tab" id="live-tab" type="button" role="tab" aria-selected="true" aria-controls="live-panel">New observation</button>
+        <button class="tab" id="prepared-tab" type="button" role="tab" aria-selected="false" aria-controls="prepared-panel">Prepared examples</button>
+      </nav>
+
+      <section id="live-panel" class="live-shell" role="tabpanel" aria-labelledby="live-tab">
+        <div class="kicker">Credentialed public workflow</div>
+        <h2>Observe your own public video</h2>
+        <p>VideoDB ingests the source, creates a cautious scene index, and generates a durable evidence reel. Jobs continue if this page closes and restore on refresh.</p>
+        <form id="live-form" class="live-form">
+          <input id="live-source" name="sourceUrl" type="url" required maxlength="2048" placeholder="https://www.youtube.com/watch?v=..." aria-label="Public wildlife video URL" />
+          <select id="live-lens" name="lens" aria-label="Analysis lens"><option value="wildlife">Wildlife observer</option><option value="habitat">Habitat monitor</option></select>
+          <button id="live-submit" class="primary" type="submit">Start observation</button>
+        </form>
+        <p class="live-meta"><button id="sample-source" class="journey-button" type="button">Use the curated dry-waterhole source</button> 10-minute maximum · 2 runs/browser/day · visible evidence only</p>
+        <div id="live-error" class="live-card status-error" role="alert" hidden></div>
+        <div id="live-result" class="live-grid" hidden>
+          <article class="live-card">
+            <div class="kicker" id="live-run-id"></div><h3 id="live-stage"></h3>
+            <div class="progress"><div id="live-progress"></div></div><p class="live-meta" id="live-progress-label"></p>
+            <div class="media" id="live-media" hidden><video id="live-player" title="WildWatch VideoDB evidence playback" controls playsinline preload="metadata" crossorigin="anonymous"></video><p id="live-player-status" class="muted">Loading the VideoDB evidence stream…</p><p class="muted"><a id="live-source-link" target="_blank" rel="noreferrer">Open full VideoDB source stream</a></p></div>
+          </article>
+          <article class="live-card"><div class="kicker">Provider-produced observations</div><ol id="live-observations" class="observations"></ol><p id="live-empty" class="muted" hidden>No visible observation was extracted. The original source is still playable.</p></article>
+        </div>
+        <p class="notice"><strong>Alert boundary:</strong> this public workflow produces a review and evidence reel. Telegram delivery remains an optional operator integration and is currently unconfigured; no notification is simulated.</p>
+      </section>
+
+      <div id="prepared-panel" role="tabpanel" aria-labelledby="prepared-tab" hidden>
 
       <section class="journey" aria-label="Prepared wildlife examples">
         <nav class="panel" aria-label="Select a prepared example">
@@ -75,6 +120,7 @@
         <strong>Continue in the live workflow when an operator is ready.</strong>
         <p>The local WildWatch runtime retains RTSP bridging, the four prompt pipelines, cross-modal correlation, Telegram delivery, and daily-reel generation. Those actions are intentionally not available in this public prepared mode. <a href="https://github.com/Nischay-VideoDB/wildwatch#readme">Open the local workflow guide</a>.</p>
       </section>
+      </div>
     </main>
     <script>
       const preparedJourneyManifest = {
@@ -218,5 +264,6 @@
       });
       selectJourney(preparedJourneyManifest.entries[0]);
     </script>
+    <script type="module" src="/live.js"></script>
   </body>
 </html>

@@ -1,44 +1,14 @@
-# Secrets / state
-.env
-.env.local
-.state.json
-data/
-
-# Python
+node_modules/
+.output/
+.vercel/
+.workflow-data/
+.swc/
+showcase/.output/
 __pycache__/
-*.py[cod]
-*$py.class
-.venv/
-venv/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# Build / dist
-build/
-dist/
+**/__pycache__/
 *.egg-info/
-
-# Samples (binary, fetched on demand)
-samples/**/*.mp4
-samples/**/*.webm
-samples/**/*.mkv
-samples/**/*.jpg
-samples/**/*.jpeg
-samples/**/*.png
-samples/**/*.wav
-samples/**/_work/
-samples/**/build_results.json
-
-# Logs
-*.log
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Editors
-.vscode/
-.idea/
-*.swp
-logs/
+data/
+.env*
+!.env.example
+*.tsbuildinfo
+.vercel
